@@ -29,4 +29,3 @@ def decrypt_vigenere(word, key_word):
         plaintext += caesar.decrypt_caesar(char, shift)
 
     return plaintext
-
