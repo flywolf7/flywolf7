@@ -1,30 +1,32 @@
-def encrypt_vigenere(plaintext: str, keyword: str) -> str:
-    """
-    Encrypts plaintext using a Vigenere cipher.
+import caesar
 
-    >>> encrypt_vigenere("PYTHON", "A")
-    'PYTHON'
-    >>> encrypt_vigenere("python", "a")
-    'python'
-    fregerg
-    'LXFOPVEFRNHR'
-    """
-    ciphertext = ""
-    # PUT YOUR CODE HERE
+
+def encrypt_vigenere(word, key_word):
+    if len(word) > len(key_word):  # Увеличение длины ключа
+        for i in range(len(word)):
+            key_word += key_word[i]
+    key_word = key_word.upper()
+
+    ciphertext = ''
+    for i in range(len(word)):
+        char = word[i]
+        shift = ord(key_word[i]) - ord('A')
+        ciphertext += caesar.encrypt_caesar(char, shift)
+
     return ciphertext
 
 
-def decrypt_vigenere(ciphertext: str, keyword: str) -> str:
-    """
-    Decrypts a ciphertext using a Vigenere cipher.
+def decrypt_vigenere(word, key_word):
+    if len(word) > len(key_word):  # Увеличение длины ключа
+        for i in range(len(word)):
+            key_word += key_word[i]
+    key_word = key_word.upper()
 
-    >>> decrypt_vigenere("PYTHON", "A")
-    'PYTHON'
-    >>> decrypt_vigenere("python", "a")
-    'python'
-    >>> decrypt_vigenere("LXFOPVEFRNHR", "LEMON")
-    'ATTACKATDAWN'
-    """
     plaintext = ""
-    # PUT YOUR CODE HERE
+    for i in range(len(word)):
+        char = word[i]
+        shift = ord(key_word[i]) - ord('A')
+        plaintext += caesar.decrypt_caesar(char, shift)
+
     return plaintext
+
