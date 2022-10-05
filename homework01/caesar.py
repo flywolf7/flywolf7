@@ -1,46 +1,39 @@
-import typing as tp
+import string
 
 
-def encrypt_caesar(plaintext: str, shift: int = 3) -> str:
-    """
-    Encrypts plaintext using a Caesar cipher.
+def encrypt_caesar(word, shift):
+    abc = string.ascii_lowercase + string.ascii_uppercase
 
-    >>> encrypt_caesar("PYTHON")
-    'SBWKRQ'
-    >>> encrypt_caesar("python")
-    'sbwkrq'
-    >>> encrypt_caesar("Python3.6")
-    'Sbwkrq3.6'
-    >>> encrypt_caesar("")
-    ''
-    """
-    ciphertext = ""
-    # PUT YOUR CODE HERE
+    ciphertext = ''
+    for i in range(len(word)):
+        char = word[i]
+
+        if char not in abc:
+            ciphertext += char
+        elif char in abc[:26]:
+            index = (ord(char) - ord('a') + shift) % 26
+            ciphertext += chr(ord('a') + index)
+        elif char in abc[26:]:
+            index = (ord(char) - ord('A') + shift) % 26
+            ciphertext += chr(ord('A') + index)
+
     return ciphertext
 
 
-def decrypt_caesar(ciphertext: str, shift: int = 3) -> str:
-    """
-    Decrypts a ciphertext using a Caesar cipher.
+def decrypt_caesar(word, shift):
+    abc = string.ascii_lowercase + string.ascii_uppercase
 
-    >>> decrypt_caesar("SBWKRQ")
-    'PYTHON'
-    >>> decrypt_caesar("sbwkrq")
-    'python'
-    >>> decrypt_caesar("Sbwkrq3.6")
-    'Python3.6'
-    >>> decrypt_caesar("")
-    ''
-    """
     plaintext = ""
-    # PUT YOUR CODE HERE
+    for i in range(len(word)):
+        char = word[i]
+
+        if char not in abc:
+            plaintext += char
+        elif char in abc[:26]:
+            index = (ord(char) - ord('a') - shift) % 26
+            plaintext += chr(ord('a') + index)
+        elif char in abc[26:]:
+            index = (ord(char) - ord('A') - shift) % 26
+            plaintext += chr(ord('A') + index)
+
     return plaintext
-
-
-def caesar_breaker_brute_force(ciphertext: str, dictionary: tp.Set[str]) -> int:
-    """
-    Brute force breaking a Caesar cipher.
-    """
-    best_shift = 0
-    # PUT YOUR CODE HERE
-    return best_shift
