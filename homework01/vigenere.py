@@ -6,7 +6,7 @@ def encrypt_vigenere(plaintext: str, keyword: str) -> str:
     'PYTHON'
     >>> encrypt_vigenere("python", "a")
     'python'
-    >>> encrypt_vigenere("ATTACKATDAWN", "LEMON")
+    fregerg
     'LXFOPVEFRNHR'
     """
     ciphertext = ""
