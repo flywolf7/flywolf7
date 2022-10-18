@@ -217,16 +217,18 @@ def generate_sudoku(N: int) -> tp.List[tp.List[str]]:
         grid.append(["."] * 9)
 
     solved_grid = solve(grid)
-    if N >= 81:
-        return solved_grid
-    cnt = 0
-    while cnt != (81 - N):
-        row, col = randint(0, 8), randint(0, 8)
-        if solved_grid[row][col] == ".":
-            continue
-        solved_grid[row][col] = "."
-        cnt += 1
-
+    if solved_grid:
+        if N >= 81:
+            return solved_grid
+        cnt = 0
+        while cnt != (81 - N):
+            row, col = randint(0, 8), randint(0, 8)
+            if solved_grid[row][col] == ".":
+                continue
+            solved_grid[row][col] = "."
+            cnt += 1
+    else:
+        return grid
     return solved_grid
 
 
