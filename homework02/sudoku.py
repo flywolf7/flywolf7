@@ -124,6 +124,7 @@ def find_empty_positions(grid: tp.List[tp.List[str]]) -> tp.Optional[tp.Tuple[in
         for j in range(len(grid[i])):
             if grid[i][j] == ".":
                 return i, j
+    return None
 
 
 def find_possible_values(grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]) -> tp.Set[str]:
@@ -215,18 +216,18 @@ def generate_sudoku(N: int) -> tp.List[tp.List[str]]:
     for i in range(9):
         grid.append(["."] * 9)
 
-    grid = solve(grid)
+    solved_grid = solve(grid)
     if N >= 81:
-        return grid
+        return solved_grid
     cnt = 0
     while cnt != (81 - N):
         row, col = randint(0, 8), randint(0, 8)
-        if grid[row][col] == ".":
+        if solved_grid[row][col] == ".":
             continue
-        grid[row][col] = "."
+        solved_grid[row][col] = "."
         cnt += 1
 
-    return grid
+    return solved_grid
 
 
 if __name__ == "__main__":
