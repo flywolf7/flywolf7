@@ -97,9 +97,9 @@ def get_block(grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]) -> tp.List[s
     row, col = pos
     block_sz = int(math.sqrt(len(grid)))
 
-    while row % 3 != 0:
+    while row % block_sz != 0:
         row -= 1
-    while col % 3 != 0:
+    while col % block_sz != 0:
         col -= 1
 
     result = []
@@ -120,7 +120,7 @@ def find_empty_positions(grid: tp.List[tp.List[str]]) -> tp.Optional[tp.Tuple[in
     (2, 0)
     """
 
-    for i in range(len(grid)):  # Перебор всех значений в grid, и поиск '.'
+    for i in range(len(grid)):
         for j in range(len(grid[i])):
             if grid[i][j] == ".":
                 return i, j
