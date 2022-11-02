@@ -26,10 +26,5 @@ class Console(UI):
         screen = curses.initscr()
         self.draw_borders(screen)
         self.life.create_grid(randomize=True)
-        if type(self.life.max_generations) == "<class 'float'>":
-            while True:
-                self.draw_grid(screen)
-        else:
-            for i in range(int(self.life.max_generations)):
-                self.draw_grid(screen)
-        curses.endwin()
+        while True:
+            self.draw_grid(screen)
