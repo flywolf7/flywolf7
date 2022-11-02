@@ -1,3 +1,4 @@
+import copy
 import random
 import typing as tp
 
@@ -30,14 +31,14 @@ class GameOfLife:
         self.speed = speed
 
     def draw_lines(self) -> None:
-        """ Отрисовать сетку """
+        """Отрисовать сетку"""
         for x in range(0, self.width, self.cell_size):
             pygame.draw.line(self.screen, pygame.Color("black"), (x, 0), (x, self.height))
         for y in range(0, self.height, self.cell_size):
             pygame.draw.line(self.screen, pygame.Color("black"), (0, y), (self.width, y))
 
     def run(self) -> None:
-        """ Запустить игру """
+        """Запустить игру"""
         pygame.init()
         clock = pygame.time.Clock()
         pygame.display.set_caption("Game of Life")
@@ -45,17 +46,20 @@ class GameOfLife:
 
         # Создание списка клеток
         # PUT YOUR CODE HERE
+        self.grid = self.create_grid(True)
 
         running = True
         while running:
             for event in pygame.event.get():
-                if event.type == QUIT:
+                if event.type == pygame.QUIT:
                     running = False
-            self.draw_lines()
 
             # Отрисовка списка клеток
             # Выполнение одного шага игры (обновление состояния ячеек)
             # PUT YOUR CODE HERE
+            self.draw_grid()
+            self.draw_lines()
+            self.grid = self.get_next_generation()
 
             pygame.display.flip()
             clock.tick(self.speed)
@@ -79,13 +83,41 @@ class GameOfLife:
         out : Grid
             Матрица клеток размером `cell_height` х `cell_width`.
         """
-        pass
+        grid = [[0] * self.cell_width] * self.cell_height
+        if randomize == 1:
+            for i in grid:
+                for j in range(len(i)):
+                    i[j] = random.randint(0, 1)
+        return grid
 
     def draw_grid(self) -> None:
         """
         Отрисовка списка клеток с закрашиванием их в соответствующе цвета.
         """
-        pass
+        for i in range(self.cell_height):
+            for j in range(self.cell_width):
+                if self.grid[i][j] == 1:
+                    pygame.draw.rect(
+                        self.screen,
+                        pygame.Color("green"),
+                        (
+                            i * self.cell_size,
+                            j * self.cell_size,
+                            self.cell_size,
+                            self.cell_size,
+                        ),
+                    )
+                else:
+                    pygame.draw.rect(
+                        self.screen,
+                        pygame.Color("white"),
+                        (
+                            i * self.cell_size,
+                            j * self.cell_size,
+                            self.cell_height,
+                            self.cell_width,
+                        ),
+                    )
 
     def get_neighbours(self, cell: Cell) -> Cells:
         """
@@ -105,7 +137,21 @@ class GameOfLife:
         out : Cells
             Список соседних клеток.
         """
-        pass
+
+        x, y = cell
+        x -= 1
+        y -= 1
+
+        cells: tp.List[int] = []
+        for i in range(x, x + 3):
+            for j in range(y, y + 3):
+                if cell[0] == i and cell[1] == j:
+                    continue
+                if 0 <= i < self.height and 0 <= j < self.width:
+                    value = self.grid[i][j]
+                    cells.append(value)
+
+        return cells
 
     def get_next_generation(self) -> Grid:
         """
@@ -116,4 +162,19 @@ class GameOfLife:
         out : Grid
             Новое поколение клеток.
         """
-        pass
+        changed_grid = copy.deepcopy(self.grid)
+
+        for i in range(self.height):
+            for j in range(self.width):
+                val = sum(self.get_neighbours((i, j)))
+                if self.grid[i][j] == 1:
+                    if val > 3 or val < 2:
+                        changed_grid[i][j] = 0
+                    else:
+                        changed_grid[i][j] = 1
+                elif self.grid[i][j] == 0:
+                    if val == 3:
+                        changed_grid[i][j] = 1
+                    else:
+                        changed_grid[i][j] = 0
+        return changed_grid
