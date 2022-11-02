@@ -1,9 +1,7 @@
-import pathlib
-import typing as tp
-import random
 import copy
-
-from pygame.locals import *
+import pathlib
+import random
+import typing as tp
 
 Cell = tp.Tuple[int, int]
 Cells = tp.List[int]
