@@ -13,7 +13,11 @@ class Console(UI):
 
     def draw_grid(self, screen) -> None:
         for i in range(0, len(self.life.curr_generation)):
-            screen.addstr(i + 1, 1, "".join(map(str, self.life.curr_generation[i])).replace("0", " ").replace("1", "*"))
+            screen.addstr(
+                i + 1,
+                1,
+                "".join(map(str, self.life.curr_generation[i])).replace("0", " ").replace("1", "*"),
+            )
         screen.refresh()
         screen.getch()
         self.life.step()
