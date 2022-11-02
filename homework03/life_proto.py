@@ -96,7 +96,7 @@ class GameOfLife:
         """
         for i in range(self.cell_height):
             for j in range(self.cell_width):
-                if self.grid[i, j] == 1:
+                if self.grid[i][j] == 1:
                     pygame.draw.rect(
                         self.screen,
                         pygame.Color("green"),
