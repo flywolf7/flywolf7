@@ -14,7 +14,6 @@ class GameOfLife:
     def __init__(
         self, width: int = 640, height: int = 480, cell_size: int = 10, speed: int = 10
     ) -> None:
-        self.grid = None
         self.width = width
         self.height = height
         self.cell_size = cell_size
@@ -47,7 +46,7 @@ class GameOfLife:
 
         # Создание списка клеток
         # PUT YOUR CODE HERE
-        grid = self.create_grid(True)
+        self.grid = self.create_grid(True)
 
         running = True
         while running:
