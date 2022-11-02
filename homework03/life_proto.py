@@ -1,5 +1,6 @@
 import random
 import typing as tp
+import copy
 
 import pygame
 from pygame.locals import *
@@ -13,6 +14,7 @@ class GameOfLife:
     def __init__(
         self, width: int = 640, height: int = 480, cell_size: int = 10, speed: int = 10
     ) -> None:
+        self.grid = None
         self.width = width
         self.height = height
         self.cell_size = cell_size
@@ -45,6 +47,8 @@ class GameOfLife:
 
         # Создание списка клеток
         # PUT YOUR CODE HERE
+        grid = self.create_grid(True)
+        self.grid = grid
 
         running = True
         while running:
@@ -79,13 +83,25 @@ class GameOfLife:
         out : Grid
             Матрица клеток размером `cell_height` х `cell_width`.
         """
-        pass
+        grid = [[0] * self.cell_width] * self.cell_height
+        if randomize == 1:
+            for i in grid:
+                for j in range(len(i)):
+                    i[j] = random.randint(0, 1)
+        return grid
 
     def draw_grid(self) -> None:
         """
         Отрисовка списка клеток с закрашиванием их в соответствующе цвета.
         """
-        pass
+
+        grid = self.grid
+        for i in range(self.cell_height):
+            for j in range(self.cell_width):
+                if grid[i, j] == 1:
+                    pygame.draw.rect(self.screen, pygame.Color("green"), i, j, self.cell_height, self.cell_width)
+                else:
+                    pygame.draw.rect(self.screen, pygame.Color("white"), i, j, self.cell_height, self.cell_width)
 
     def get_neighbours(self, cell: Cell) -> Cells:
         """
@@ -105,7 +121,21 @@ class GameOfLife:
         out : Cells
             Список соседних клеток.
         """
-        pass
+
+        x, y = cell
+        x -= 1
+        y -= 1
+
+        cells: tp.List[int] = []
+        for i in range(x, x + 3):
+            for j in range(y, y + 3):
+                if cell[0] == i and cell[1] == j:
+                    continue
+                if 0 <= i < self.height and 0 <= j < self.width:
+                    value = self.grid[i][j]
+                    cells.append(value)
+
+        return cells
 
     def get_next_generation(self) -> Grid:
         """
@@ -116,4 +146,19 @@ class GameOfLife:
         out : Grid
             Новое поколение клеток.
         """
-        pass
+        changed_grid = copy.deepcopy(self.grid)
+
+        for i in range(self.height):
+            for j in range(self.width):
+                val = sum(self.get_neighbours((i, j)))
+                if self.grid[i][j] == 1:
+                    if val > 3 or val < 2:
+                        changed_grid[i][j] = 0
+                    else:
+                        changed_grid[i][j] = 1
+                elif self.grid[i][j] == 0:
+                    if val == 3:
+                        changed_grid[i][j] = 1
+                    else:
+                        changed_grid[i][j] = 0
+        return changed_grid

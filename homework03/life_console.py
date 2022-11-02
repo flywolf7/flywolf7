@@ -1,22 +1,20 @@
-import curses
-
+import pygame
 from life import GameOfLife
+from pygame.locals import *
 from ui import UI
 
 
-class Console(UI):
-    def __init__(self, life: GameOfLife) -> None:
+class GUI(UI):
+    def __init__(self, life: GameOfLife, cell_size: int = 10, speed: int = 10) -> None:
         super().__init__(life)
 
-    def draw_borders(self, screen) -> None:
-        """ Отобразить рамку. """
-        pass
-
-    def draw_grid(self, screen) -> None:
-        """ Отобразить состояние клеток. """
+    def draw_lines(self) -> None:
+        # Copy from previous assignment
+        for i in range(0, self.l)
+    def draw_grid(self) -> None:
+        # Copy from previous assignment
         pass
 
     def run(self) -> None:
-        screen = curses.initscr()
-        # PUT YOUR CODE HERE
-        curses.endwin()
+        # Copy from previous assignment
+        pass
