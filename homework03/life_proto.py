@@ -114,7 +114,7 @@ class GameOfLife:
                         i * self.cell_size,
                         j * self.cell_size,
                         self.cell_height,
-                        self.cell_width
+                        self.cell_width,
                     )
 
     def get_neighbours(self, cell: Cell) -> Cells:
