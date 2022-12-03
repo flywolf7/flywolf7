@@ -88,7 +88,3 @@ def get_wall_execute(
         result += response
         time.sleep(1)
     return json_normalize(result)
-
-
-if __name__ == "__main__":
-    a = get_wall_execute(domain="cs102py", count=1)
