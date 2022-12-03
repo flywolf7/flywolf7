@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import networkx as nx
 import pandas as pd
 
-from vkapi.friends import get_friends, get_mutual
+from vkapi.friends import get_friends, get_mutual, get_friends_list
 
 
 def ego_network(
@@ -18,7 +18,17 @@ def ego_network(
     :param user_id: Идентификатор пользователя, для которого строится граф друзей.
     :param friends: Идентификаторы друзей, между которыми устанавливаются связи.
     """
-    pass
+    if friends is None:
+        friends = get_friends_list(user_id=user_id)
+
+    mutual_friends = get_mutual(source_uid=user_id, target_uids=friends)
+
+    data = list()
+
+    for friends_1 in mutual_friends:
+        for friends_2 in friends_1["common_friends"]:
+            data.append((friends_1["id"], friends_2))
+    return data
 
 
 def plot_ego_network(net: tp.List[tp.Tuple[int, int]]) -> None:

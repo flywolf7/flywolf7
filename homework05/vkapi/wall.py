@@ -1,12 +1,14 @@
+import math
 import textwrap
 import time
 import typing as tp
 from string import Template
 
 import pandas as pd
+import requests
 from pandas import json_normalize
 
-from vkapi import config, session
+from vkapi.config import VK_CONFIG
 from vkapi.exceptions import APIError
 
 
@@ -20,7 +22,37 @@ def get_posts_2500(
     extended: int = 0,
     fields: tp.Optional[tp.List[str]] = None,
 ) -> tp.Dict[str, tp.Any]:
-    pass
+    if domain == "":
+        code = f"""return API.wall.get(&
+                    "owner_id": "{owner_id}",
+                    "offset": {offset},
+                    "count": {count},
+                    "filter": "{filter}",
+                    "extended": {extended},
+                    "v": "5.131",
+                    *);"""
+    else:
+        code = f"""return API.wall.get(&
+                            "owner_id": "{owner_id}",
+                            "domain": "{domain}",
+                            "offset": {offset},
+                            "count": {count},
+                            "filter": "{filter}",
+                            "extended": {extended},
+                            "v": "5.131",
+                            *);"""
+    code = code.replace("&", "{").replace("*", "}")
+
+    response_json = requests.post(
+        "https://api.vk.com/method/execute",
+        data={
+            "access_token": VK_CONFIG['access_token'],
+            "code": code,
+            "v": VK_CONFIG['version'],
+        },
+    ).json()
+
+    return response_json["response"]["items"]
 
 
 def get_wall_execute(
@@ -36,9 +68,7 @@ def get_wall_execute(
 ) -> pd.DataFrame:
     """
     Возвращает список записей со стены пользователя или сообщества.
-
     @see: https://vk.com/dev/wall.get
-
     :param owner_id: Идентификатор пользователя или сообщества, со стены которого необходимо получить записи.
     :param domain: Короткий адрес пользователя или сообщества.
     :param offset: Смещение, необходимое для выборки определенного подмножества записей.
@@ -49,4 +79,16 @@ def get_wall_execute(
     :param fields: Список дополнительных полей для профилей и сообществ, которые необходимо вернуть.
     :param progress: Callback для отображения прогресса.
     """
-    pass
+
+    result = []
+    for i in range(math.ceil(count / 2500)):
+        response = get_posts_2500(
+            owner_id, domain, i * 2500, max_count, max_count, filter, extended, fields
+        )
+        result += response
+        time.sleep(1)
+    return json_normalize(result)
+
+
+if __name__ == "__main__":
+    a = get_wall_execute(domain="cs102py", count=1)

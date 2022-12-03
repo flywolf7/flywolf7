@@ -14,4 +14,14 @@ def age_predict(user_id: int) -> tp.Optional[float]:
     :param user_id: Идентификатор пользователя.
     :return: Медианный возраст пользователя.
     """
-    pass
+    friends_list = get_friends(user_id=user_id, fields=["bdate"])
+
+    dates = list()
+    for friend in friends_list.items:
+        try:
+            date = friend["bdate"]
+            if date.count(".") == 2:
+                dates.append(int(date[date.rfind(".") + 1:]))
+        except KeyError:
+            pass
+    return sum(dates) // len(dates)
