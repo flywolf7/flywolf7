@@ -76,11 +76,11 @@ def get_wall_execute(
     :param progress: Callback для отображения прогресса.
     """
 
-    result = list()
+    to_return: list = []
     for i in range(math.ceil(count / 2500)):
         response = get_posts_2500(
             owner_id, domain, i * 2500, max_count, max_count, filter, extended, fields
         )
-        result += response
+        to_return += response
         time.sleep(1)
-    return json_normalize(result)
+    return json_normalize(to_return)

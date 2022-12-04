@@ -13,12 +13,11 @@ def age_predict(user_id: int) -> tp.Optional[float]:
     :return: Медианный возраст пользователя.
     """
     friends_list = get_friends(user_id=user_id, fields=["bdate"])
-
     dates = list()
     for friend in friends_list.items:
         try:
-            date = friend.get("bdate")
-            if (date is str) and (date.count(".") == 2):
+            date = str(friend["bdate"])
+            if date.count(".") == 2:
                 dates.append(int(date[date.rfind(".") + 1 :]))
         except KeyError:
             pass
