@@ -1,5 +1,3 @@
-import datetime as dt
-import statistics
 import typing as tp
 
 from vkapi.friends import get_friends
@@ -14,4 +12,19 @@ def age_predict(user_id: int) -> tp.Optional[float]:
     :param user_id: Идентификатор пользователя.
     :return: Медианный возраст пользователя.
     """
-    pass
+    friends_list = get_friends(user_id=user_id, fields=["bdate"])
+    dates = list()
+    for friend in friends_list.items:
+        try:
+            if isinstance(friend, dict):
+                date = str(friend.get("bdate"))  # type : ignore
+                if date.count(".") == 2:
+                    dates.append(int(date[date.rfind(".") + 1 :]))
+        except KeyError:
+            pass
+
+    if dates:
+        avg_bdate = sum(dates) // len(dates)
+        return 2022.0 - avg_bdate
+    else:
+        return None

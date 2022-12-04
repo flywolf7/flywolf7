@@ -1,13 +1,11 @@
-import textwrap
+import math
 import time
 import typing as tp
-from string import Template
 
 import pandas as pd
+import requests  # type: ignore
 from pandas import json_normalize
-
-from vkapi import config, session
-from vkapi.exceptions import APIError
+from vkapi.config import VK_CONFIG
 
 
 def get_posts_2500(
@@ -20,7 +18,22 @@ def get_posts_2500(
     extended: int = 0,
     fields: tp.Optional[tp.List[str]] = None,
 ) -> tp.Dict[str, tp.Any]:
-    pass
+    code = """return API.wall.get({
+        "domain": "domain",
+        "owner_id": "owner_id",
+        "offset": offset,
+        "extended": extended,
+        "filter": "filter",
+        "fields": "fields",
+        "count": "1",
+        "v": "v"
+    });"""
+    response_json = requests.post(
+        url="https://api.vk.com/method/execute",
+        data={"access_token": VK_CONFIG["access_token"], "code": code, "v": VK_CONFIG["version"]},
+    ).json()
+
+    return response_json["response"]["items"]
 
 
 def get_wall_execute(
@@ -36,9 +49,7 @@ def get_wall_execute(
 ) -> pd.DataFrame:
     """
     Возвращает список записей со стены пользователя или сообщества.
-
     @see: https://vk.com/dev/wall.get
-
     :param owner_id: Идентификатор пользователя или сообщества, со стены которого необходимо получить записи.
     :param domain: Короткий адрес пользователя или сообщества.
     :param offset: Смещение, необходимое для выборки определенного подмножества записей.
@@ -49,4 +60,13 @@ def get_wall_execute(
     :param fields: Список дополнительных полей для профилей и сообществ, которые необходимо вернуть.
     :param progress: Callback для отображения прогресса.
     """
-    pass
+    to_return: list = []
+    for i in range(math.ceil(count / 2500)):
+        response = get_posts_2500(
+            owner_id, domain, i * 2500, max_count, max_count, filter, extended, fields
+        )
+        to_return += response
+        if i % 2 == 0:
+            time.sleep(1)
+
+    return json_normalize(to_return)
