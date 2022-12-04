@@ -22,4 +22,9 @@ def age_predict(user_id: int) -> tp.Optional[float]:
                     dates.append(int(date[date.rfind(".") + 1 :]))
         except KeyError:
             pass
-    return sum(dates) // len(dates)
+
+    if dates:
+        avg_bdate = sum(dates) // len(dates)
+        return 2022.0 - avg_bdate
+    else:
+        return None

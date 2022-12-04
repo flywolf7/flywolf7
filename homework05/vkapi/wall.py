@@ -3,8 +3,9 @@ import time
 import typing as tp
 
 import pandas as pd
-import requests
+import requests  # type: ignore
 from pandas import json_normalize
+
 from vkapi.config import VK_CONFIG
 
 
@@ -18,34 +19,23 @@ def get_posts_2500(
     extended: int = 0,
     fields: tp.Optional[tp.List[str]] = None,
 ) -> tp.Dict[str, tp.Any]:
-    if domain == "":
-        code = f"""return API.wall.get(&
-                    "owner_id": "{owner_id}",
-                    "offset": {offset},
-                    "count": {count},
-                    "filter": "{filter}",
-                    "extended": {extended},
-                    "v": "5.131",
-                    *);"""
-    else:
-        code = f"""return API.wall.get(&
-                            "owner_id": "{owner_id}",
-                            "domain": "{domain}",
-                            "offset": {offset},
-                            "count": {count},
-                            "filter": "{filter}",
-                            "extended": {extended},
-                            "v": "5.131",
-                            *);"""
-    code = code.replace("&", "{").replace("*", "}")
-
+    code = """return API.wall.get({
+        "domain": "domain",
+        "owner_id": "owner_id",
+        "offset": offset,
+        "extended": extended,
+        "filter": "filter",
+        "fields": "fields",
+        "count": "1",
+        "v": "v"
+    });"""
     response_json = requests.post(
-        "https://api.vk.com/method/execute",
+        url="https://api.vk.com/method/execute",
         data={
             "access_token": VK_CONFIG["access_token"],
             "code": code,
-            "v": VK_CONFIG["version"],
-        },
+            "v": VK_CONFIG["version"]
+        }
     ).json()
 
     return response_json["response"]["items"]
@@ -75,12 +65,13 @@ def get_wall_execute(
     :param fields: Список дополнительных полей для профилей и сообществ, которые необходимо вернуть.
     :param progress: Callback для отображения прогресса.
     """
-
-    to_return: list = []
+    to_return = []
     for i in range(math.ceil(count / 2500)):
         response = get_posts_2500(
             owner_id, domain, i * 2500, max_count, max_count, filter, extended, fields
         )
         to_return += response
-        time.sleep(1)
+        if i % 2 == 0:
+            time.sleep(1)
+
     return json_normalize(to_return)
