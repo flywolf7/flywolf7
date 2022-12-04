@@ -40,7 +40,7 @@ class Session:
                     raise requests.exceptions.HTTPError
                 if tries == self.max_retries:
                     raise requests.exceptions.RetryError
-                sleep = (self.backoff_factor * (2 ** tries)).__round__()
+                sleep = (self.backoff_factor * (2**tries)).__round__()
                 time.sleep(sleep)
                 tries += 1
 
@@ -65,7 +65,7 @@ class Session:
                     raise requests.exceptions.RetryError
 
                 time.sleep(delay)
-                delay = (self.backoff_factor * (2 ** tries)).__round__()
+                delay = (self.backoff_factor * (2**tries)).__round__()
 
             except requests.exceptions.ConnectionError:
                 raise requests.exceptions.ConnectionError

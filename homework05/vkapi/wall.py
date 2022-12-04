@@ -42,9 +42,9 @@ def get_posts_2500(
     response_json = requests.post(
         "https://api.vk.com/method/execute",
         data={
-            "access_token": VK_CONFIG['access_token'],
+            "access_token": VK_CONFIG["access_token"],
             "code": code,
-            "v": VK_CONFIG['version'],
+            "v": VK_CONFIG["version"],
         },
     ).json()
 

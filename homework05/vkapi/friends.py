@@ -39,7 +39,9 @@ def get_friends(
         v=VK_CONFIG["version"],
     ).json()
 
-    to_return = FriendsResponse(friends_json["response"]["count"], friends_json["response"]["items"])
+    to_return = FriendsResponse(
+        friends_json["response"]["count"], friends_json["response"]["items"]
+    )
     return to_return
 
 
