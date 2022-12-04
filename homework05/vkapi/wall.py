@@ -5,7 +5,6 @@ import typing as tp
 import pandas as pd
 import requests  # type: ignore
 from pandas import json_normalize
-
 from vkapi.config import VK_CONFIG
 
 
