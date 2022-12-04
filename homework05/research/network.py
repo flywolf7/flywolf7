@@ -18,7 +18,7 @@ def ego_network(
     :param friends: Идентификаторы друзей, между которыми устанавливаются связи.
     """
     if not friends:
-        friends = get_friends_list(user_id=user_id)
+        friends = get_friends_list(user_id=int(user_id))  # type : ignore
 
     mutual_friends = list(get_mutual(source_uid=user_id, target_uids=friends))
     data = list()

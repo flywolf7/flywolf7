@@ -60,7 +60,7 @@ def get_wall_execute(
     :param fields: Список дополнительных полей для профилей и сообществ, которые необходимо вернуть.
     :param progress: Callback для отображения прогресса.
     """
-    to_return = []
+    to_return: list = []
     for i in range(math.ceil(count / 2500)):
         response = get_posts_2500(
             owner_id, domain, i * 2500, max_count, max_count, filter, extended, fields
