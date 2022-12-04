@@ -18,16 +18,15 @@ def ego_network(
     :param friends: Идентификаторы друзей, между которыми устанавливаются связи.
     """
     if friends is None:
-        friends = get_friends_list(user_id=int(user_id))
+        friends = get_friends_list(user_id=user_id)
 
     mutual_friends = list(get_mutual(source_uid=user_id, target_uids=friends))
-    print(mutual_friends)
     data = list()
 
     for friends_1 in mutual_friends:
-        friends_id = friends_1.get("common_friends")
+        friends_id = dict(friends_1).get("common_friends")
         for friends_2 in friends_id:
-            data.append((friends_1.get("id"), friends_2))
+            data.append((dict(friends_1).get("id"), friends_2))
     return data
 
 
