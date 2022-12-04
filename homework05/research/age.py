@@ -17,7 +17,7 @@ def age_predict(user_id: int) -> tp.Optional[float]:
     dates = list()
     for friend in friends_list.items:
         try:
-            date = friend["bdate"]
+            date = friend.get("bdate")
             if date.count(".") == 2:
                 dates.append(int(date[date.rfind(".") + 1 :]))
         except KeyError:

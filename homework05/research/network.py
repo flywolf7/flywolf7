@@ -18,15 +18,16 @@ def ego_network(
     :param friends: Идентификаторы друзей, между которыми устанавливаются связи.
     """
     if friends is None:
-        friends = get_friends_list(user_id=user_id)
+        friends = get_friends_list(user_id=int(user_id))
 
-    mutual_friends = get_mutual(source_uid=user_id, target_uids=friends)
-
+    mutual_friends = list(get_mutual(source_uid=user_id, target_uids=friends))
+    print(mutual_friends)
     data = list()
 
     for friends_1 in mutual_friends:
-        for friends_2 in friends_1["common_friends"]:
-            data.append((friends_1["id"], friends_2))
+        friends_id = friends_1.get("common_friends")
+        for friends_2 in friends_id:
+            data.append((friends_1.get("id"), friends_2))
     return data
 
 
@@ -75,3 +76,7 @@ def describe_communities(
                     data.append([cluster_n] + [friend.get(field) for field in fields])  # type: ignore
                     break
     return pd.DataFrame(data=data, columns=["cluster"] + fields)
+
+
+if __name__ == "__main__":
+    a = ego_network(user_id=239047363)
