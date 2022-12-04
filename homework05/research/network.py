@@ -24,9 +24,8 @@ def ego_network(
     data = list()
 
     for friends_1 in mutual_friends:
-        friends_id = friends_1.get("common_friends")  # type : ignore
-        for friends_2 in friends_id:
-            data.append((friends_1.get("id"), friends_2))  # type : ignore
+        for friends_2 in friends_1["common_friends"]:  # type : ignore
+            data.append((friends_1["id"], friends_2))  # type : ignore
     return data
 
 
