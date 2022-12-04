@@ -1,10 +1,7 @@
+import time
 import typing as tp
 
 import requests
-import time
-from vkapi.config import VK_CONFIG
-from requests.adapters import HTTPAdapter
-from requests.packages.urllib3.util.retry import Retry
 
 
 class Session:

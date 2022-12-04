@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import networkx as nx
 import pandas as pd
 
-from vkapi.friends import get_friends, get_mutual, get_friends_list
+from vkapi.friends import get_friends_list, get_mutual
 
 
 def ego_network(

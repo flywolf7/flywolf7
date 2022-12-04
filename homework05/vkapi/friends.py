@@ -5,7 +5,6 @@ import typing as tp
 
 from vkapi import Session
 from vkapi.config import VK_CONFIG
-from vkapi.exceptions import APIError
 
 QueryParams = tp.Optional[tp.Dict[str, tp.Union[str, int]]]
 
